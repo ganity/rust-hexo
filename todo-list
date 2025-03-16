@@ -1,4 +1,4 @@
-让我分析一下 rust-hexo 还需要完善的地方：
+rust-hexo 还需要完善的地方：
 RSS/Atom 订阅插件的完善
 虽然在 Cargo.toml 中已经引入了 atom_syndication 和 rss 依赖，但目前还没有独立的 RSS/Atom 插件
 建议实现一个专门的订阅插件，支持以下功能：
