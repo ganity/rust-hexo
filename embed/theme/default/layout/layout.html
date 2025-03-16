@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="{{ site.config.language | default(value='zh-CN') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ page.title | default(value=site.config.title) }} | {{ site.config.title }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ page.description | default(value=site.config.description) }}{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}{{ page.keywords | default(value=site.config.keywords) }}{% endblock %}">
+    
+    <!-- 基础样式 -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- 代码高亮 - 在所有页面启用 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/styles/default.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.11.1/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+            });
+        });
+    </script>
+    
+    <!-- 数学公式支持 -->
+    {% if plugins and plugins.rust_hexo_math %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "\\[", right: "\\]", display: true}
+                ]
+            });
+        });
+    </script>
+    {% endif %}
+    
+    <!-- 插件头部资源 -->
+    {% if plugin_head_resources %}
+    {% for resource in plugin_head_resources %}
+    {{ resource | safe }}
+    {% endfor %}
+    {% endif %}
+</head>
+<body>
+    <header class="site-header">
+        <div class="container">
+            <h1 class="site-title"><a href="/">{{ site.config.title }}</a></h1>
+            <p class="site-description">{{ site.config.subtitle }}</p>
+            
+            <nav class="site-nav">
+                <ul>
+                    <li><a href="/">首页</a></li>
+                    <li><a href="/archives/">归档</a></li>
+                    <li><a href="/categories/">分类</a></li>
+                    <li><a href="/tags/">标签</a></li>
+                    <li class="search-container">
+                        <div class="nav-search-box">
+                            <input type="text" id="nav-search-input" placeholder="搜索..." oninput="navSearch()">
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="site-content">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    
+    <footer class="site-footer">
+        <div class="container">
+            <div class="copyright">
+                &copy; {{ date(value=now(), format="%Y") }} {{ site.config.author }}
+                <span>由 <a href="https://github.com/ganity/rust-hexo" target="_blank">Rust-Hexo</a> 强力驱动</span>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- 代码复制功能 -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 为每个代码块添加复制按钮
+        document.querySelectorAll('pre code').forEach(function(block) {
+            // 创建复制按钮
+            var button = document.createElement('button');
+            button.className = 'copy-button';
+            button.textContent = '复制';
+            
+            // 将复制按钮添加到代码块的父元素中
+            var pre = block.parentNode;
+            pre.style.position = 'relative';
+            pre.appendChild(button);
+            
+            // 添加点击事件处理
+            button.addEventListener('click', function() {
+                var code = block.textContent;
+                navigator.clipboard.writeText(code).then(function() {
+                    button.textContent = '已复制!';
+                    setTimeout(function() {
+                        button.textContent = '复制';
+                    }, 2000);
+                }, function(err) {
+                    console.error('复制失败: ', err);
+                    button.textContent = '复制失败';
+                    setTimeout(function() {
+                        button.textContent = '复制';
+                    }, 2000);
+                });
+            });
+        });
+    });
+    </script>
+    
+    <!-- 评论系统脚本 -->
+    {% if site.config.comments and site.config.comments.enable %}
+    {% if site.config.comments.provider == 'giscus' %}
+    <script src="https://giscus.app/client.js"
+        data-repo="{{ site.config.comments.repo }}"
+        data-repo-id="{{ site.config.comments.repo_id }}"
+        data-category="{{ site.config.comments.category }}"
+        data-category-id="{{ site.config.comments.category_id }}"
+        data-mapping="{{ site.config.comments.mapping | default(value='pathname') }}"
+        data-reactions-enabled="{{ site.config.comments.reactions | default(value='1') }}"
+        data-emit-metadata="{{ site.config.comments.emit_metadata | default(value='0') }}"
+        data-theme="{{ site.config.comments.theme | default(value='light') }}"
+        data-lang="{{ site.config.comments.lang | default(value='zh-CN') }}"
+        crossorigin="anonymous"
+        async>
+    </script>
+    {% endif %}
+    {% endif %}
+    
+    <!-- 插件底部资源 -->
+    {% if plugin_footer_resources %}
+    {% for resource in plugin_footer_resources %}
+    {{ resource | safe }}
+    {% endfor %}
+    {% endif %}
+    
+    <!-- 在body结束标签前添加导航栏搜索脚本 -->
+    <script>
+    let navSearchTimeout = null;
+    
+    function navSearch() {
+        const query = document.getElementById('nav-search-input').value.trim();
+        if (query) {
+            clearTimeout(navSearchTimeout);
+            navSearchTimeout = setTimeout(() => {
+                window.location.href = `/search/?q=${encodeURIComponent(query)}`;
+            }, 500); // 添加500毫秒延迟
+        }
+    }
+    
+    // 添加键盘事件监听
+    document.getElementById('nav-search-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            const query = e.target.value.trim();
+            if (query) {
+                clearTimeout(navSearchTimeout);
+                window.location.href = `/search/?q=${encodeURIComponent(query)}`;
+            }
+        }
+    });
+    </script>
+</body>
+</html> 

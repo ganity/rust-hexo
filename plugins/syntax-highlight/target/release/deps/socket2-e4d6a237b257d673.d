@@ -1,0 +1,11 @@
+/Users/ganily/trae/dust/rust-hexo/plugins/syntax-highlight/target/release/deps/libsocket2-e4d6a237b257d673.rmeta: /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/lib.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sockaddr.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/socket.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sockref.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sys/unix.rs
+
+/Users/ganily/trae/dust/rust-hexo/plugins/syntax-highlight/target/release/deps/libsocket2-e4d6a237b257d673.rlib: /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/lib.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sockaddr.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/socket.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sockref.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sys/unix.rs
+
+/Users/ganily/trae/dust/rust-hexo/plugins/syntax-highlight/target/release/deps/socket2-e4d6a237b257d673.d: /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/lib.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sockaddr.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/socket.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sockref.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sys/unix.rs
+
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/lib.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sockaddr.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/socket.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sockref.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/socket2-0.5.8/src/sys/unix.rs:

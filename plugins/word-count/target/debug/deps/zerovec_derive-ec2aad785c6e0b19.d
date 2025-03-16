@@ -1,0 +1,10 @@
+/Users/ganily/trae/dust/rust-hexo/plugins/word-count/target/debug/deps/libzerovec_derive-ec2aad785c6e0b19.dylib: /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/lib.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/make_ule.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/make_varule.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/ule.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/utils.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/varule.rs
+
+/Users/ganily/trae/dust/rust-hexo/plugins/word-count/target/debug/deps/zerovec_derive-ec2aad785c6e0b19.d: /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/lib.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/make_ule.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/make_varule.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/ule.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/utils.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/varule.rs
+
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/lib.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/make_ule.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/make_varule.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/ule.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/utils.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/zerovec-derive-0.10.3/src/varule.rs:

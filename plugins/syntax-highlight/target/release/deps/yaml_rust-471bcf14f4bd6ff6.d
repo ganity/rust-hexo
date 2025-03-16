@@ -1,0 +1,11 @@
+/Users/ganily/trae/dust/rust-hexo/plugins/syntax-highlight/target/release/deps/libyaml_rust-471bcf14f4bd6ff6.rmeta: /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/lib.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/emitter.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/parser.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/scanner.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/yaml.rs
+
+/Users/ganily/trae/dust/rust-hexo/plugins/syntax-highlight/target/release/deps/libyaml_rust-471bcf14f4bd6ff6.rlib: /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/lib.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/emitter.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/parser.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/scanner.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/yaml.rs
+
+/Users/ganily/trae/dust/rust-hexo/plugins/syntax-highlight/target/release/deps/yaml_rust-471bcf14f4bd6ff6.d: /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/lib.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/emitter.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/parser.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/scanner.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/yaml.rs
+
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/lib.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/emitter.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/parser.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/scanner.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/yaml-rust-0.4.5/src/yaml.rs:

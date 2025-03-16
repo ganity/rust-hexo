@@ -1,0 +1,10 @@
+/Users/ganily/trae/dust/rust-hexo/plugins/word-count/target/debug/deps/libthread_local-b3b74320114924df.rmeta: /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/lib.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/cached.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/thread_id.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/unreachable.rs
+
+/Users/ganily/trae/dust/rust-hexo/plugins/word-count/target/debug/deps/libthread_local-b3b74320114924df.rlib: /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/lib.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/cached.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/thread_id.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/unreachable.rs
+
+/Users/ganily/trae/dust/rust-hexo/plugins/word-count/target/debug/deps/thread_local-b3b74320114924df.d: /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/lib.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/cached.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/thread_id.rs /Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/unreachable.rs
+
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/lib.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/cached.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/thread_id.rs:
+/Users/ganily/.cargo/registry/src/mirrors.ustc.edu.cn-04b7754156161b43/thread_local-1.1.8/src/unreachable.rs:

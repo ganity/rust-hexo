@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<article class="post">
+    <header class="article-header">
+        <h1 class="article-title">{{ page.title }}</h1>
+        <p class="article-meta">
+            日期: {{ date(value=page.date, format="%Y-%m-%d") }}
+            {% if page.categories and page.categories|length > 0 %}
+            | 分类: 
+            {% for category in page.categories %}
+            <a href="/categories/{{ category }}/">{{ category }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            {% endif %}
+            
+            {% if page.tags and page.tags|length > 0 %}
+            | 标签: 
+            {% for tag in page.tags %}
+            <a href="/tags/{{ tag }}/">{{ tag }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+            {% endif %}
+        </p>
+        
+        <!-- Debug information -->
+        <div class="debug-info">
+            <p>Plugins object exists: {{ plugins is defined }}</p>
+            {% if plugins is defined %}
+            <p>Available plugins: 
+                {% for key, value in plugins %}
+                {{ key }} ({{ value }}), 
+                {% endfor %}
+            </p>
+            <p>Has word-count plugin: {{ "word-count" in plugins }}</p>
+            {% endif %}
+        </div>
+        
+        <!-- 字数统计 -->
+        {% if plugins and plugins["word-count"] %}
+        <p class="word-count">
+            <span>字数统计: {{ word_count(content=page.content) }} 字</span>
+            <span>预计阅读时间: {{ reading_time(content=page.content) }} 分钟</span>
+        </p>
+        {% endif %}
+    </header>
+    
+    <div class="article-content">
+        {{ page.content | safe }}
+    </div>
+    
+    <!-- 文章底部信息 -->
+    <footer class="article-footer">
+        <!-- 标签和分类 -->
+        <div class="article-tags-categories">
+            {% if page.categories and page.categories|length > 0 %}
+            <div class="article-categories">
+                <span>分类:</span>
+                {% for category in page.categories %}
+                <a href="/categories/{{ category }}/">{{ category }}</a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if page.tags and page.tags|length > 0 %}
+            <div class="article-tags">
+                <span>标签:</span>
+                {% for tag in page.tags %}
+                <a href="/tags/{{ tag }}/">{{ tag }}</a>{% if not loop.last %}, {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- 上一篇/下一篇 -->
+        <div class="article-pagination">
+            {% if page.prev %}
+            <span class="prev-article">
+                <a href="{{ page.prev.path }}" title="{{ page.prev.title }}">« 上一篇</a>
+            </span>
+            {% endif %}
+            
+            {% if page.next %}
+            <span class="next-article">
+                <a href="{{ page.next.path }}" title="{{ page.next.title }}">下一篇 »</a>
+            </span>
+            {% endif %}
+        </div>
+    </footer>
+</article>
+{% endblock %} 

@@ -1,0 +1,18 @@
+[package]
+name = "rust-hexo-math"
+version = "0.1.0"
+edition = "2021"
+description = "数学公式渲染插件，支持 KaTeX 和 MathJax"
+authors = ["Rust-Hexo Team"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+rust-hexo = { path = "../.." }
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9"
+semver = "1.0"
+tracing = "0.1"
+regex = "1.10" 

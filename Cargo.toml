@@ -1,0 +1,60 @@
+[package]
+name = "rust-hexo"
+version = "0.1.0"
+edition = "2021"
+authors = ["Your Name"]
+description = "A static blog generator inspired by Hexo, written in Rust"
+license = "MIT"
+
+[[bin]]
+name = "rust-hexo"
+path = "src/main.rs"
+
+[lib]
+name = "rust_hexo"
+path = "src/lib.rs"
+
+[dependencies]
+# 命令行参数解析
+clap = { version = "4.0", features = ["derive"] }
+# 异步运行时
+tokio = { version = "1.0", features = ["full"] }
+# 错误处理
+anyhow = "1.0"
+thiserror = "1.0"
+# 日志
+tracing = "0.1"
+tracing-subscriber = "0.3"
+# 文件系统操作
+walkdir = "2.4"
+notify = "6.0"
+# 模板引擎
+tera = "1.19"
+# Markdown 处理
+pulldown-cmark = "0.9"
+# 前端文件解析
+gray_matter = "0.2"
+# YAML 处理
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9"
+serde_json = "1.0"
+yaml-rust2 = "0.8"
+toml = "0.8"
+# HTTP 服务器（用于本地预览）
+axum = "0.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["fs", "trace"] }
+# 其他工具
+chrono = { version = "0.4", features = ["serde"] }
+slug = "0.1"
+url = "2.5"
+colored = "2.1"
+# 并发处理
+rayon = "1.8"
+# RSS/Atom 生成
+atom_syndication = "0.12"
+rss = "2.0"
+# 动态库加载
+libloading = "0.8"
+petgraph = "0.6"
+semver = "1.0"

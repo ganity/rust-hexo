@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="tag-page">
+  <h1 class="page-title">标签: {{ page.tag }}</h1>
+  <div class="posts">
+    {% for post in page.posts %}
+    <article class="post">
+      <header>
+        <h2 class="post-title"><a href="{{ post.path }}">{{ post.title }}</a></h2>
+        <div class="post-meta">
+          <time datetime="{{ post.date }}">{{ date(value=post.date, format="%Y-%m-%d") }}</time>
+          {% if post.categories and post.categories|length %}
+          <span class="post-categories">| 分类：
+            {% for category in post.categories %}
+            <a href="/categories/{{ category }}/">{{ category }}</a>{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </span>
+          {% endif %}
+          <!-- 字数统计插件 -->
+          {% if plugins and plugins["word-count"] %}
+          <span class="word-count">| 字数：{{ word_count(content=post.content) }} 字</span>
+          {% endif %}
+        </div>
+      </header>
+      <div class="post-excerpt">
+        {% if post.excerpt %}
+          {{ post.excerpt | safe }}
+        {% else %}
+          {{ post.content | truncate(length=200) | safe }}
+        {% endif %}
+      </div>
+      <div class="read-more"><a href="{{ post.path }}">阅读更多 &raquo;</a></div>
+    </article>
+    {% endfor %}
+  </div>
+  
+  {% if page.total > 1 %}
+  <nav class="pagination">
+    {% if page.prev %}
+    <a href="{{ page.prev_link }}" class="prev">&laquo; 上一页</a>
+    {% endif %}
+    
+    {% for i in range(start=1, end=page.total + 1) %}
+    {% if i == page.current %}
+    <span class="page-number current">{{ i }}</span>
+    {% else %}
+    <a href="{{ page.base }}{% if i > 1 %}page/{{ i }}/{% endif %}" class="page-number">{{ i }}</a>
+    {% endif %}
+    {% endfor %}
+    
+    {% if page.next %}
+    <a href="{{ page.next_link }}" class="next">下一页 &raquo;</a>
+    {% endif %}
+  </nav>
+  {% endif %}
+</div>
+{% endblock %}

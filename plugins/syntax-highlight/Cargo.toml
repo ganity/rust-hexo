@@ -1,0 +1,18 @@
+[package]
+name = "rust-hexo-syntax-highlight"
+version = "0.1.0"
+edition = "2021"
+description = "代码高亮插件，支持多种编程语言和主题"
+authors = ["Rust-Hexo Team"]
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+rust-hexo = { path = "../.." }
+anyhow = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.9"
+semver = "1.0"
+tracing = "0.1"
+syntect = "5.0" 
