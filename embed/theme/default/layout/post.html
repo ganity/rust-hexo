@@ -21,19 +21,6 @@
             {% endif %}
         </p>
         
-        <!-- Debug information -->
-        <div class="debug-info">
-            <p>Plugins object exists: {{ plugins is defined }}</p>
-            {% if plugins is defined %}
-            <p>Available plugins: 
-                {% for key, value in plugins %}
-                {{ key }} ({{ value }}), 
-                {% endfor %}
-            </p>
-            <p>Has word-count plugin: {{ "word-count" in plugins }}</p>
-            {% endif %}
-        </div>
-        
         <!-- 字数统计 -->
         {% if plugins and plugins["word-count"] %}
         <p class="word-count">
