@@ -29,7 +29,7 @@ You can install Rust-Hexo from source:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/rust-hexo.git
+git clone https://github.com/ganity/rust-hexo.git
 cd rust-hexo
 
 # Build the project

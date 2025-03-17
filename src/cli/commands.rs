@@ -261,7 +261,7 @@ rust-hexo generate
 rust-hexo server
 ```
 
-更多信息请访问[文档](https://github.com/your-username/rust-hexo)。
+更多信息请访问[文档](https://github.com/ganity/rust-hexo)。
 "#;
     fs::write(hello_post, hello_content)?;
 

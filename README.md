@@ -29,7 +29,7 @@ Rust-Hexo is a static blog generator inspired by Hexo, reimplemented in Rust to 
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/rust-hexo.git
+git clone https://github.com/ganity/rust-hexo.git
 cd rust-hexo
 
 # Compile the project

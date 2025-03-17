@@ -29,7 +29,7 @@ Rust-Hexo 是一个受 Hexo 启发的静态博客生成器，使用 Rust 语言�
 
 ```bash
 # 克隆仓库
-git clone https://github.com/your-username/rust-hexo.git
+git clone https://github.com/ganity/rust-hexo.git
 cd rust-hexo
 
 # 编译项目
