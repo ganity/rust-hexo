@@ -291,7 +291,7 @@ date: {{ date }}
 pub async fn execute(cli: Cli) -> Result<()> {
     let site_path = cli.path.clone();
     
-    let mut engine = Engine::new(site_path.clone())?;
+    let mut engine = Engine::new(cli.path)?;
     
     match cli.command {
         Commands::Init(args) => {
