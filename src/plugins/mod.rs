@@ -422,18 +422,17 @@ impl PluginManager {
     /// 检查插件管理器是否已初始化
     pub fn is_initialized(&self) -> bool {
         // 检查内部状态标志和插件数量
-        // if !self.initialized {
-        //     return false;
-        // }
+        if !self.initialized {
+            return false;
+        }
         
-        // // 检查是否已加载插件
-        // let plugins = self.plugins.read().unwrap();
-        // if plugins.is_empty() {
-        //     return false;
-        // }
+        // 检查是否已加载插件
+        let plugins = self.plugins.read().unwrap();
+        if plugins.is_empty() {
+            return false;
+        }
         
-        // true
-        false
+        true
     }
     
     /// 设置插件上下文

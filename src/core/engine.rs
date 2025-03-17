@@ -3,6 +3,7 @@ use std::path::{Path, PathBuf};
 use std::collections::HashMap;
 use std::sync::{Arc, RwLock};
 use std::sync::mpsc;
+use std::any::Any;
 
 use anyhow::{Context as AnyhowContext, Result};
 use chrono::{Utc, TimeZone};
@@ -56,6 +57,8 @@ pub struct Engine {
     pub plugin_manager: PluginManager,
     /// 主题渲染器
     theme_renderer: Option<ThemeRenderer>,
+    /// 文件监视器
+    file_watcher: Arc<RwLock<Option<Box<dyn Any + Send + Sync>>>>,
 }
 
 // 手动实现Sync，因为所有的字段都是Sync的
@@ -73,11 +76,13 @@ impl Engine {
         let theme_dir = base_dir.join("themes").join("default");
         let scaffold_dir = base_dir.join("scaffolds");
 
-        // 检查必要目录是否存在
-        if !source_dir.exists() {
-            fs::create_dir_all(&source_dir)?;
-            info!("创建 source 目录");
-        }
+        // 检查必要目录是否存在，如果不存在且不是在initialize_site_structure之后，再创建
+        // 这样可以避免重复创建目录
+        // if !source_dir.exists() {
+        //     info!("创建 source 目录");
+        //     fs::create_dir_all(&source_dir)
+        //         .with_context(|| format!("创建目录失败: {}", source_dir.display()))?;
+        // }
         
         // 配置文件
         let config_path = base_dir.join("_config.yml");
@@ -85,8 +90,8 @@ impl Engine {
             Config::load(&config_path)?
         } else {
             let config = Config::default();
-            config.save(&config_path)?;
-            info!("创建默认配置文件");
+            // config.save(&config_path)?;
+            // info!("创建默认配置文件");
             config
         };
         
@@ -108,6 +113,7 @@ impl Engine {
             is_watching: Arc::new(RwLock::new(false)),
             plugin_manager: PluginManager::new(base_dir_clone, PluginContext::default()),
             theme_renderer: None,
+            file_watcher: Arc::new(RwLock::new(None)),
         })
     }
     
@@ -574,6 +580,13 @@ impl Engine {
         // 确保已加载文章
         if self.posts.read().unwrap().is_empty() {
             self.load_posts_and_pages()?;
+        } else {
+            // 在文件监视模式下，文章可能已被修改，需要重新加载
+            // 通过检查 is_watching 状态判断
+            if *self.is_watching.read().unwrap() {
+                debug!("检测到监视模式，重新加载文章和页面");
+                self.load_posts_and_pages()?;
+            }
         }
         
         // 处理分类和标签
@@ -711,18 +724,292 @@ impl Engine {
     /// 创建新文章
     pub async fn new_post(&self, title: &str, path: Option<&str>) -> Result<()> {
         info!("创建新文章: {}", title);
-        if let Some(path) = path {
-            info!("在自定义路径: {}", path);
+        // 生成slug化的文件名
+        let slug = slug::slugify(title);
+        let filename = format!("{}.md", slug);
+        
+        // 确定目标路径
+        let target_path = match path {
+            Some(p) => {
+                let mut path = self.source_dir.join("_posts").join(p);
+                if path.is_dir() {
+                    path.push(filename);
+                }
+                path
+            }
+            None => self.source_dir.join("_posts").join(filename),
+        };
+
+        // 创建父目录（如果不存在）
+        if let Some(parent) = target_path.parent() {
+            if !parent.exists() {
+                fs::create_dir_all(parent)
+                    .with_context(|| format!("创建目录失败: {}", parent.display()))?;
+            }
         }
-        // TODO: 实现文章创建逻辑
+
+        // 检查文件是否已存在
+        if target_path.exists() {
+            return Err(anyhow::anyhow!("文件已存在: {}", target_path.display()));
+        }
+
+        // 生成Front Matter内容
+        let front_matter = format!(
+            "---\n\
+            title: {}\n\
+            date: {}\n\
+            ---\n\n\
+            # {}\n\n\
+            在这里开始你的创作...\n",
+            title,
+            chrono::Local::now().format("%Y-%m-%d %H:%M:%S"),
+            title
+        );
+
+        // 写入文件
+        fs::write(&target_path, front_matter)
+            .with_context(|| format!("写入文件失败: {}", target_path.display()))?;
+
+        info!("成功创建文章: {}", target_path.display());
         Ok(())
     }
 
     /// 开始监视文件变化
     pub async fn watch(&self) -> Result<()> {
-        info!("开始监视文件变化");
-        // TODO: 实现文件监控逻辑
-        *self.is_watching.write().unwrap() = true;
+        info!("{}", "Watching for file changes...".green());
+        
+        // 设置监听状态
+        {
+            let mut is_watching = self.is_watching.write().unwrap();
+            *is_watching = true;
+        }
+        
+        // 使用notify库监听文件变化
+        use notify::{Config, Event, RecommendedWatcher, RecursiveMode, Watcher, EventKind};
+        use std::sync::mpsc;
+        use std::time::Duration;
+        
+        info!("创建文件监视器，基础目录: {:?}", self.base_dir);
+        
+        // 创建通道以接收文件系统事件
+        let (tx, rx) = mpsc::channel();
+        
+        // 创建一个监视器，使用明确的配置
+        let mut watcher_config = Config::default();
+        // 注意：notify 6.x 版本的 poll_interval 不接受参数
+        // 使用推荐的自动配置
+        
+        info!("初始化监视器，配置: {:?}", watcher_config);
+        
+        // 创建一个监视器
+        let mut watcher = match RecommendedWatcher::new(
+            move |res: Result<Event, notify::Error>| {
+                match res {
+                    Ok(event) => {
+                        // 直接在回调中打印信息，以便确认事件触发
+                        println!("收到文件事件: {:?}", event);
+                        let _ = tx.send(event);
+                    },
+                    Err(e) => {
+                        println!("监视错误: {:?}", e);
+                    }
+                }
+            },
+            watcher_config,
+        ) {
+            Ok(w) => {
+                info!("成功创建监视器");
+                w
+            },
+            Err(e) => {
+                error!("创建监视器失败: {:?}", e);
+                return Err(anyhow::anyhow!("创建文件监视器失败: {}", e));
+            }
+        };
+        
+        // 监视源目录和所有子目录
+        info!("正在监控目录: {:?}", self.source_dir);
+        match watcher.watch(&self.source_dir, RecursiveMode::Recursive) {
+            Ok(_) => info!("成功添加源目录到监控"),
+            Err(e) => error!("监控源目录失败: {:?}", e),
+        }
+        
+        // 如果主题目录存在，也监视它
+        if self.theme_dir.exists() {
+            info!("正在监控主题目录: {:?}", self.theme_dir);
+            match watcher.watch(&self.theme_dir, RecursiveMode::Recursive) {
+                Ok(_) => info!("成功添加主题目录到监控"),
+                Err(e) => error!("监控主题目录失败: {:?}", e),
+            }
+        }
+        
+        // 尝试明确地监控一些特定的子目录，以增加监控范围
+        let source_posts_dir = self.source_dir.join("_posts");
+        if source_posts_dir.exists() {
+            info!("明确监控文章目录: {:?}", source_posts_dir);
+            match watcher.watch(&source_posts_dir, RecursiveMode::Recursive) {
+                Ok(_) => info!("成功添加文章目录到监控"),
+                Err(e) => warn!("监控文章目录失败 (可能已被监控): {:?}", e),
+            }
+        }
+        
+        // 关键修改：保存 watcher 对象到 Engine 结构体中，避免它被销毁
+        // 这样可以确保 watcher 保持存活，并继续发送事件到通道
+        {
+            let watcher_box: Box<dyn Any + Send + Sync> = Box::new(watcher);
+            *self.file_watcher.write().unwrap() = Some(watcher_box);
+            info!("文件监视器已保存到引擎实例中，确保其生命周期持续整个监控过程");
+        }
+        
+        // 创建一个引擎的克隆，用于生成
+        let mut engine = self.clone();
+        
+        // 在后台启动监视任务
+        tokio::spawn(async move {
+            // 创建一个防抖动计时器，避免频繁生成
+            let mut last_event = std::time::Instant::now();
+            let debounce_time = Duration::from_millis(1000);
+            // let mut event_count = 0;
+            
+            info!("启动文件监控循环");
+            
+            loop {
+                // 添加周期性日志，以便跟踪循环是否仍在运行
+                // if event_count % 100 == 0 {
+                //     info!("监控循环运行中... 已处理事件数: {}", event_count);
+                // }
+                
+                // 读取事件，设置超时
+                match rx.recv_timeout(Duration::from_secs(1)) {
+                    Ok(event) => {
+                        // event_count += 1;
+                        // info!("收到事件 #{}: {:?}", event_count, event);
+                        
+                        // 检查事件路径
+                        if let Some(path) = event.paths.get(0) {
+                            info!("事件路径: {:?}", path);
+                            
+                            // 输出文件是否存在的信息
+                            if path.exists() {
+                                info!("文件存在: {:?}", path);
+                                // 如果是文件，尝试获取一些元数据
+                                if path.is_file() {
+                                    match std::fs::metadata(path) {
+                                        Ok(meta) => info!("文件元数据: 大小={}字节, 只读={}", meta.len(), meta.permissions().readonly()),
+                                        Err(e) => warn!("无法获取文件元数据: {:?}", e),
+                                    }
+                                }
+                            } else {
+                                info!("文件不存在（可能已删除）: {:?}", path);
+                            }
+                        } else {
+                            warn!("事件没有包含路径信息");
+                        }
+                        
+                        // 只处理创建、修改和删除事件
+                        match event.kind {
+                            EventKind::Create(_) | 
+                            EventKind::Modify(_) | 
+                            EventKind::Remove(_) => {
+                                info!("有效的事件类型: {:?}", event.kind);
+                                
+                                // 检查是否是我们关心的文件类型
+                                let mut is_relevant = false;
+                                for path in &event.paths {
+                                    // 详细检查路径
+                                    info!("检查路径: {}", path.display());
+                                    
+                                    // 对于目录，直接认为是相关变化
+                                    if path.is_dir() {
+                                        is_relevant = true;
+                                        info!("检测到目录变化: {}", path.display());
+                                        break;
+                                    }
+                                    
+                                    // 对于文件，更详细地检查扩展名
+                                    if let Some(ext) = path.extension() {
+                                        let ext_str = ext.to_string_lossy().to_lowercase();
+                                        info!("文件扩展名: {}", ext_str);
+                                        
+                                        if ext_str == "md" || ext_str == "markdown" || 
+                                           ext_str == "yml" || ext_str == "yaml" || 
+                                           ext_str == "html" || ext_str == "css" || ext_str == "js" {
+                                            is_relevant = true;
+                                            info!("检测到相关文件变化: {}", path.display());
+                                            break;
+                                        }
+                                    } else {
+                                        info!("文件没有扩展名: {}", path.display());
+                                    }
+                                    
+                                    // 特别处理 _config.yml 文件
+                                    if path.file_name().map_or(false, |name| name == "_config.yml") {
+                                        is_relevant = true;
+                                        info!("检测到配置文件变化: {}", path.display());
+                                        break;
+                                    }
+                                }
+                                
+                                if is_relevant {
+                                    // 更新最后事件时间
+                                    last_event = std::time::Instant::now();
+                                    info!("设置重新生成计时器，{}毫秒后将重新生成", debounce_time.as_millis());
+                                } else {
+                                    info!("忽略不相关的文件变化");
+                                }
+                            },
+                            _ => {
+                                info!("忽略事件类型: {:?}", event.kind);
+                            }
+                        }
+                    },
+                    Err(mpsc::RecvTimeoutError::Timeout) => {
+                        // 周期性地输出更明确的超时信息
+                        // if event_count % 50 == 0 {
+                        //     info!("监控超时，等待文件变化... (上次事件距今: {}毫秒)", last_event.elapsed().as_millis());
+                        // }
+                        
+                        // 如果自上次事件以来已过去debounce时间，且有事件发生，则重新生成
+                        if last_event.elapsed() >= debounce_time {
+                            // 移除了额外的条件限制，只要超过防抖时间就重新生成
+                            let elapsed = last_event.elapsed().as_millis();
+                            
+                            if elapsed < 10000 { // 只有在过去10秒内有事件时才重新生成
+                                info!("检测到文件变化，重新生成... (上次事件距今: {}毫秒)", elapsed);
+                                
+                                // 重新生成前重新加载文章
+                                info!("重新加载文章内容...");
+                                if let Err(e) = engine.load_posts_and_pages() {
+                                    error!("重新加载文章失败: {}", e);
+                                }
+                                
+                                // 重新生成静态文件
+                                let public_dir = engine.public_dir.clone();
+                                if let Err(e) = engine.generate(&public_dir) {
+                                    error!("重新生成失败: {}", e);
+                                } else {
+                                    info!("重新生成成功");
+                                }
+                                
+                                // 重置最后事件时间，使用足够长的时间以避免连续触发
+                                last_event = std::time::Instant::now() - Duration::from_secs(10);
+                            }
+                        }
+                        
+                        // 检查是否仍在监视
+                        if !*engine.is_watching.read().unwrap() {
+                            info!("监视已停止，退出监控循环");
+                            break;
+                        }
+                    },
+                    Err(mpsc::RecvTimeoutError::Disconnected) => {
+                        error!("监控通道已断开，退出监控循环");
+                        break;
+                    }
+                }
+            }
+        });
+        
         Ok(())
     }
 

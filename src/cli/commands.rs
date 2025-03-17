@@ -291,7 +291,7 @@ date: {{ date }}
 pub async fn execute(cli: Cli) -> Result<()> {
     let site_path = cli.path.clone();
     
-    let mut engine = Engine::new(cli.path)?;
+    let mut engine = Engine::new(site_path.clone())?;
     
     match cli.command {
         Commands::Init(args) => {
@@ -318,9 +318,9 @@ pub async fn execute(cli: Cli) -> Result<()> {
             // 初始化网站文件结构
             initialize_site_structure(&site_path, &site_title)?;
             
-            // 创建初始化结构
-            let mut engine = Engine::new(site_path.clone())?;
-            engine.init()?;
+            // 创建引擎实例，但不调用init()方法
+            // 因为initialize_site_structure已经创建了必要的文件结构
+            // let engine = Engine::new(site_path.clone())?;
             
             info!("Initialized new site at: {}", site_path.display());
         }
