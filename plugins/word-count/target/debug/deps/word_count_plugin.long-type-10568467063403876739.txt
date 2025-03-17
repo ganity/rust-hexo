@@ -1,1 +1,0 @@
-HashMap<std::string::String, Box<(dyn for<'a> Fn(&'a HashMap<std::string::String, serde_json::Value>) -> Result<serde_json::Value, tera::Error> + Send + Sync + 'static)>>

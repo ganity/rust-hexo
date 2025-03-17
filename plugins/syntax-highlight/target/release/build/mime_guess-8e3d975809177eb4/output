@@ -1,1 +1,0 @@
-cargo:rustc-env=MIME_TYPES_GENERATED_PATH=/Users/ganily/trae/dust/rust-hexo/plugins/syntax-highlight/target/release/build/mime_guess-8e3d975809177eb4/out/mime_types_generated.rs
